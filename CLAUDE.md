@@ -79,6 +79,29 @@ AI-DLC（AI Development Life Cycle）上でのKiroスタイル仕様駆動開発
    - 詳細なコミットメッセージ
    - PRボディにIssue参照を含める
 
+### GitHub Issue/PR 作成ルール
+
+**Issue作成時**:
+```bash
+gh issue create --assignee "@me" --label "<適切なラベル>" --title "..." --body "..."
+```
+
+**PR作成時**:
+```bash
+gh pr create --assignee "@me" --label "<適切なラベル>" --title "..." --body "..."
+```
+
+**ラベル選択ガイド**:
+| ラベル | 用途 |
+|--------|------|
+| `bug` | バグ修正 |
+| `enhancement` | 新機能・機能改善 |
+| `documentation` | ドキュメント更新 |
+
+**必須設定**:
+- `--assignee "@me"`: 作成者を自動アサイン
+- `--label`: 内容に応じた適切なラベル
+
 ### コア技術
 
 - **言語**: Luau (--!strict モード)
