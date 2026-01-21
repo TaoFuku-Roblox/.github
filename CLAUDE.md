@@ -81,25 +81,85 @@ AI-DLC（AI Development Life Cycle）上でのKiroスタイル仕様駆動開発
 
 ### GitHub Issue/PR 作成ルール
 
-**Issue作成時**:
+Issue作成時には **Type** と **Label** を判断して付与する。
+
+#### Type判断基準
+
+| Type | 説明 | 判断基準 |
+|------|------|----------|
+| `Feature` | A request, idea, or new functionality | 新しい機能やユーザー価値の追加 |
+| `Bug` | An unexpected problem or behavior | 既存機能の不具合修正 |
+| `Task` | A specific piece of work | 技術的作業、リファクタリング、ドキュメントなど |
+
+#### Label判断基準
+
+| Label | 説明 | 判断基準 |
+|-------|------|----------|
+| `enhancement` | New feature or request | 新機能、既存機能の拡張・改善 |
+| `bug` | Something isn't working | 既存機能が期待通り動作しない |
+| `documentation` | Improvements or additions to documentation | README、設計書、コメントの追加・修正 |
+| `help wanted` | Extra attention is needed | 外部からの協力が必要 |
+| `good first issue` | Good for newcomers | 新規コントリビューター向け |
+| `question` | Further information is requested | 追加情報が必要 |
+
+#### TypeとLabelの組み合わせ例
+
+| シナリオ | Type | Label |
+|----------|------|-------|
+| 新しい配達システムを実装 | `Feature` | `enhancement` |
+| NPC接触判定のバグを修正 | `Bug` | `bug` |
+| READMEにセットアップ手順追加 | `Task` | `documentation` |
+| 仕様について質問がある | - | `question` |
+
+#### Issue作成コマンド
+
 ```bash
-gh issue create --assignee "@me" --label "<適切なラベル>" --title "..." --body "..."
+# 新機能Issue
+gh issue create \
+  --assignee "@me" \
+  --type "Feature" \
+  --label "enhancement" \
+  --title "タイトル" \
+  --body "本文"
+
+# バグ修正Issue
+gh issue create \
+  --assignee "@me" \
+  --type "Bug" \
+  --label "bug" \
+  --title "タイトル" \
+  --body "本文"
+
+# ドキュメントタスク
+gh issue create \
+  --assignee "@me" \
+  --type "Task" \
+  --label "documentation" \
+  --title "タイトル" \
+  --body "本文"
 ```
 
-**PR作成時**:
+#### PR作成コマンド
+
 ```bash
-gh pr create --assignee "@me" --label "<適切なラベル>" --title "..." --body "..."
+gh pr create \
+  --assignee "@me" \
+  --label "<適切なラベル>" \
+  --title "タイトル" \
+  --body "本文"
 ```
 
-**ラベル選択ガイド**:
-| ラベル | 用途 |
-|--------|------|
-| `bug` | バグ修正 |
-| `enhancement` | 新機能・機能改善 |
-| `documentation` | ドキュメント更新 |
+#### 関連Issue紐付け
 
-**必須設定**:
+PR本文に以下を含めてIssueと紐付ける:
+```
+Closes #<issue番号>
+```
+
+#### 必須設定
+
 - `--assignee "@me"`: 作成者を自動アサイン
+- `--type`: Issue Typeを指定（Issue作成時）
 - `--label`: 内容に応じた適切なラベル
 
 ### コア技術
