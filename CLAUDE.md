@@ -174,6 +174,46 @@ Closes #<issue番号>
 - `--type`: Issue Typeを指定（Issue作成時）
 - `--label`: 内容に応じた適切なラベル
 
+### ブランチ戦略（GitHub Flow）
+
+シンプルなGitHub Flowを採用。Gitflowの複雑さは小〜中規模プロジェクトでは不要。
+
+#### ブランチ構成
+
+```
+main（本番）
+  ├── feature-#<issue>-<name>（機能開発）
+  └── hotfix-#<issue>-<name>（緊急修正）
+```
+
+#### mainブランチ
+
+- 常にデプロイ可能な状態を維持
+- 直接コミット禁止（PRのみ）
+- 仕様ドキュメント（`.kiro/specs/`）はmainで管理
+
+#### featureブランチ
+
+- 命名: `feature-#<issue番号>-<機能名>`
+- 例: `feature-#12-disc-flick-system`
+- 1機能 = 1ブランチ = 1 PR
+- mainから分岐、mainへマージ
+- マージ後は削除
+
+#### hotfixブランチ
+
+- 命名: `hotfix-#<issue番号>-<修正内容>`
+- 例: `hotfix-#15-score-calculation`
+- mainから分岐、即座にPR → マージ
+
+#### ブランチ作成タイミング
+
+| フェーズ | ブランチ | 備考 |
+|---------|---------|------|
+| spec-init〜spec-tasks | main | 仕様は共有ドキュメント |
+| Issue作成 | main | ブランチ名にIssue番号が必要 |
+| spec-impl（実装開始） | feature | コード変更開始時に分岐 |
+
 ### コア技術
 
 - **言語**: Luau (--!strict モード)
