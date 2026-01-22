@@ -6,6 +6,18 @@
 
 AI-DLC（AI Development Life Cycle）上でのKiroスタイル仕様駆動開発の実装。
 
+### cc-sdd セットアップ
+
+新規プロジェクトでは、以下のコマンドでcc-sddをセットアップ:
+
+```bash
+npx cc-sdd@latest --lang ja
+```
+
+これにより以下が自動生成される:
+- `.claude/commands/kiro/` - 11個のスラッシュコマンド
+- `.kiro/settings/` - テンプレートとルール
+
 ### パス
 - ステアリング: `.kiro/steering/`
 - 仕様: `.kiro/specs/`
