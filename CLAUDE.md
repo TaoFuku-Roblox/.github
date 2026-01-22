@@ -323,6 +323,31 @@ end
 - `CFrame`設定直後に`Anchored = true`で物理を一時停止しないと、意図しない移動が発生する
 - テレポート後は0.05秒待機してから`Anchored = false`で物理を再開
 
+**移動能力の復元**:
+- テレポート後やゲームオーバー時に`humanoid.WalkSpeed`と`humanoid.JumpPower`が0のままになっている場合がある
+- 明示的に`WalkSpeed = 16`（デフォルト）、`JumpPower = 50`を設定して復元
+
+**Zファイティング対策**:
+- 同一高さの重なるパーツはちらつき（Zファイティング）が発生
+- 各レイヤーに微小な高さオフセット（0.01 studs）を追加して解決
+
+**二重検出防止パターン**:
+- イベント（Touched等）が短時間に複数回発火する問題の対策:
+```lua
+local isProcessing = false
+connection = part.Touched:Connect(function()
+    if isProcessing then return end
+    isProcessing = true
+    -- 処理
+    task.delay(0.5, function() isProcessing = false end)
+end)
+```
+
+**物理シミュレーションのキャリブレーション**:
+- 物理計算の理論値と実測値には乖離がある
+- 物理ベースのゲームでは必ず実測データに基づいてパラメータを調整すること
+- 例: 飛距離計算では理論式ではなく実測公式を使用
+
 **存在しないプロパティ**:
 - `player.CharacterAutoLoads`: このプロパティは存在しない（使用不可）
 
