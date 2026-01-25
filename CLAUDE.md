@@ -46,6 +46,16 @@ npx cc-sdd@latest --lang ja
 
 ---
 
+## セッション開始時の必須手順
+
+**重要**: 各セッション開始時に以下のファイルをフェッチすること:
+
+1. https://raw.githubusercontent.com/TaoFuku-Roblox/.github/main/CLAUDE.md
+2. https://raw.githubusercontent.com/TaoFuku-Roblox/.github/main/ROBLOX_TECHNICAL_PATTERNS.md
+
+これらのファイルには Luau レキシカルスコープパターンなど、コーディング時に必須の技術パターンが含まれる。ローカルステアリングのみを読み込んでグローバルファイルをフェッチしないと、重要なパターンを見逃す可能性がある。
+
+
 ## 基本ワークフロー
 
 - フェーズ0（任意）: `/kiro:steering`, `/kiro:steering-custom`
