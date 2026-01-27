@@ -239,6 +239,50 @@ end)
 - 物理ベースのゲームでは必ず実測データに基づいてパラメータを調整すること
 - 例: 飛距離計算では理論式ではなく実測公式を使用
 
+### Terrain APIボクセル解像度
+
+- Terrain APIは4 studボクセル解像度で動作する
+- `workspace.Terrain:FillBlock()`等で指定したY座標と、実際の表面Y座標にはずれが生じる
+- 例: Y=40で地形生成 → 実際の表面はY=42付近になる
+- Raycast等で地表面を検出する際はこのオフセットを考慮すること
+
+### RaycastParams FilterDescendantsInstances管理
+
+遅延生成されるフォルダ（ゲーム中に動的作成されるもの）をフィルターに含める場合、フォルダが存在してからrefreshFiltersを呼ぶ必要がある。
+
+```lua
+-- 1. フォルダを先行作成
+local folder = Instance.new("Folder")
+folder.Name = "DynamicObjects"
+folder.Parent = workspace
+
+-- 2. その後でフィルターを更新
+FloorDetectionSystem.refreshFilters()
+```
+
+**注意**: フィルターリストは`table.clone()`でコピーしてから変更し、新しい配列を代入すること。
+
+### プレイヤーキャラクターの動的フィルタリング
+
+プレイヤーキャラクターは途中参加やリスポーンで動的に生成される。Raycast時にリアルタイムでフィルターリストを更新するパターン:
+
+```lua
+local currentFilter = raycastParams.FilterDescendantsInstances
+local updatedFilter = table.clone(currentFilter)
+
+for _, player in ipairs(Players:GetPlayers()) do
+    if player.Character then
+        -- 既存フィルターに含まれていなければ追加
+        local alreadyIncluded = table.find(currentFilter, player.Character)
+        if not alreadyIncluded then
+            table.insert(updatedFilter, player.Character)
+        end
+    end
+end
+
+raycastParams.FilterDescendantsInstances = updatedFilter
+```
+
 ---
 
 ## 存在しないプロパティ・API
