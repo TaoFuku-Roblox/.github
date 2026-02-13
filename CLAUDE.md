@@ -3,9 +3,24 @@
 オーガニゼーション全体で共通するAI開発ガイドライン。
 
 > **関連ドキュメント**:
-> - [ROBLOX_CODING_STANDARDS.md](./ROBLOX_CODING_STANDARDS.md) - コーディング規約・開発ワークフロー
+> - [DEV_WORKFLOW.md](./DEV_WORKFLOW.md) - 開発ワークフロー
+> - [ROBLOX_CODING_STANDARDS.md](./ROBLOX_CODING_STANDARDS.md) - コーディング規約
 > - [ROBLOX_TECHNICAL_PATTERNS.md](./ROBLOX_TECHNICAL_PATTERNS.md) - 技術パターン・ベストプラクティス
 > - [ROBLOX_API_REFERENCE.md](./ROBLOX_API_REFERENCE.md) - Roblox APIリファレンス
+
+---
+
+## セッション開始時の必須手順
+
+**重要**: 各セッション開始時に以下の全ファイルをフェッチすること:
+
+1. https://raw.githubusercontent.com/TaoFuku-Roblox/.github/main/CLAUDE.md
+2. https://raw.githubusercontent.com/TaoFuku-Roblox/.github/main/DEV_WORKFLOW.md
+3. https://raw.githubusercontent.com/TaoFuku-Roblox/.github/main/ROBLOX_CODING_STANDARDS.md
+4. https://raw.githubusercontent.com/TaoFuku-Roblox/.github/main/ROBLOX_TECHNICAL_PATTERNS.md
+5. https://raw.githubusercontent.com/TaoFuku-Roblox/.github/main/ROBLOX_API_REFERENCE.md
+
+ローカルステアリングのみを読み込んでグローバルファイルをフェッチしないと、開発ワークフロー・コーディング規約・技術パターンなど重要なルールを見逃す可能性がある。
 
 ---
 
@@ -34,77 +49,31 @@ npx cc-sdd@latest --lang ja
 **ステアリング** (`.kiro/steering/`) - プロジェクト全体のルールとコンテキストでAIを誘導
 **仕様** (`.kiro/specs/`) - 個別機能の開発プロセスを形式化
 
-### アクティブな仕様
-- `.kiro/specs/` でアクティブな仕様を確認
-- `/kiro:spec-status [feature-name]` で進捗を確認
+### cc-sdd コマンドマッピング
+
+開発トラック（[DEV_WORKFLOW.md](./DEV_WORKFLOW.md) 参照）に対応するcc-sddコマンド:
+
+- フェーズ0（任意）: `/kiro:steering`, `/kiro:steering-custom`
+- フェーズ1（仕様策定）:
+  - `/kiro:spec-init "説明"`
+  - `/kiro:spec-requirements {feature}`
+  - `/kiro:validate-gap {feature}` （ブラウンフィールド: ギャップ分析）
+  - `/kiro:spec-design {feature} [-y]`
+  - `/kiro:validate-design {feature}` （ブラウンフィールド: 設計互換性検証）
+  - `/kiro:spec-tasks {feature} [-y]`
+- フェーズ2（実装）: `/kiro:spec-impl {feature} [tasks]`
+  - `/kiro:validate-impl {feature}` （任意: 実装後）
+- 進捗確認: `/kiro:spec-status {feature}` （随時使用可能）
+
+各フェーズで人間のレビューが必要。意図的なファストトラックの場合のみ `-y` を使用。
 
 ---
 
 ## 開発ガイドライン
 
 - 思考は英語、レスポンスは日本語で生成。プロジェクトファイル（requirements.md、design.md、tasks.md、research.md、検証レポートなど）に書き込むMarkdownコンテンツは、仕様で設定された言語（spec.json.language参照）で記述すること。
-
----
-
-## セッション開始時の必須手順
-
-**重要**: 各セッション開始時に以下のファイルをフェッチすること:
-
-1. https://raw.githubusercontent.com/TaoFuku-Roblox/.github/main/CLAUDE.md
-2. https://raw.githubusercontent.com/TaoFuku-Roblox/.github/main/ROBLOX_TECHNICAL_PATTERNS.md
-
-これらのファイルには Luau レキシカルスコープパターンなど、コーディング時に必須の技術パターンが含まれる。ローカルステアリングのみを読み込んでグローバルファイルをフェッチしないと、重要なパターンを見逃す可能性がある。
-
-
-## 作業タイプの判定
-
-| タイプ | 説明 | 例 | ワークフロー |
-|--------|------|-----|------------|
-| **Feature** | 新機能の追加 | NPC Bot実装、壁登り機能 | フルフロー |
-| **Improvement** | 既存機能の改善・リファクタリング・削除 | 発射機能の廃止、配置方式変更 | 短縮フロー |
-| **Bugfix** | 不具合修正 | 衝突判定の修正 | 最小フロー |
-
-## ワークフロー
-
-### Feature（新機能）— フルフロー
-
-- フェーズ0（任意）: `/kiro:steering`, `/kiro:steering-custom`
-- フェーズ1（仕様策定）:
-  - `/kiro:spec-init "説明"`
-  - `/kiro:spec-requirements {feature}`
-  - `/kiro:validate-gap {feature}` （任意: 既存コードベース向け）
-  - `/kiro:spec-design {feature} [-y]`
-  - `/kiro:validate-design {feature}` （任意: 設計レビュー）
-  - `/kiro:spec-tasks {feature} [-y]`
-- フェーズ2（実装）: `/kiro:spec-impl {feature} [tasks]`
-  - `/kiro:validate-impl {feature}` （任意: 実装後）
-- 進捗確認: `/kiro:spec-status {feature}` （随時使用可能）
-
-### Improvement（改善）— 短縮フロー
-
-ステアリング更新を起点に、影響範囲に応じた仕様策定を行う。
-
-- フェーズ0（**必須**）: `/kiro:steering` — 変更対象の技術パターンを最新化
-- フェーズ1（仕様策定）:
-  - `/kiro:spec-init "説明"` — 改善の目的と範囲を明確化
-  - `/kiro:validate-gap {feature}` — 既存実装との差分を特定
-  - `/kiro:spec-design {feature} [-y]` — 変更方針を設計
-  - `/kiro:spec-tasks {feature} [-y]` — requirements は省略可（既存機能のため要件は既知）
-- フェーズ2（実装）: `/kiro:spec-impl {feature} [tasks]`
-
-### Bugfix（不具合修正）— 最小フロー
-
-- フェーズ0: グローバルステアリングファイルのフェッチ
-- 原因調査 → 修正実装 → ビルド検証 → テスト
-- 仕様策定は不要（修正が広範囲に及ぶ場合はImprovementフローを適用）
-
-
-## 開発ルール
-
-- 3フェーズ承認ワークフロー: 要件 → 設計 → タスク → 実装
-- 各フェーズで人間のレビューが必要。意図的なファストトラックの場合のみ `-y` を使用
-- ステアリングを最新に保ち、`/kiro:spec-status` でアラインメントを確認
 - ユーザーの指示に正確に従い、その範囲内で自律的に行動: 必要なコンテキストを収集し、このラン内で作業を最後まで完了する。質問は必須情報が不足している場合か、指示が致命的に曖昧な場合のみ。
+- ステアリングを最新に保ち、`/kiro:spec-status` でアラインメントを確認
 
 ---
 
