@@ -62,7 +62,7 @@ npx cc-sdd@latest --lang ja
   - `/kiro:validate-design {feature}` （ブラウンフィールド: 設計互換性検証）
   - `/kiro:spec-tasks {feature} [-y]`
 - フェーズ2（実装）: `/kiro:spec-impl {feature} [tasks]`
-  - `/kiro:validate-impl {feature}` （任意: 実装後）
+  - `/kiro:validate-impl {feature}` （必須: 実装後）
 - 進捗確認: `/kiro:spec-status {feature}` （随時使用可能）
 
 各フェーズで人間のレビューが必要。意図的なファストトラックの場合のみ `-y` を使用。
