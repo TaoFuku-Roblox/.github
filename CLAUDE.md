@@ -6,30 +6,26 @@
 > - [DEV_WORKFLOW.md](./DEV_WORKFLOW.md) - 開発ワークフロー
 > - [ROBLOX_CODING_STANDARDS.md](./ROBLOX_CODING_STANDARDS.md) - コーディング規約
 > - [ROBLOX_TECHNICAL_PATTERNS.md](./ROBLOX_TECHNICAL_PATTERNS.md) - 技術パターン・ベストプラクティス
-> - [ROBLOX_API_REFERENCE.md](./ROBLOX_API_REFERENCE.md) - Roblox APIリファレンス
+> - [ROBLOX_API_REFERENCE.md](./ROBLOX_API_REFERENCE.md) - Roblox APIリファレンス（オンデマンド）
 
 ---
 
 ## セッション開始時の必須手順
 
-**重要**: 各セッション開始時に以下の全ファイルをフェッチすること。
+**重要**: 各セッション開始時に以下のファイルをフェッチすること。
 
 リポジトリがプライベートのため、`gh api` 経由で取得する:
 
 ```bash
-# CLAUDE.md
+# 必須（毎セッション）
 gh api repos/TaoFuku-Roblox/.github/contents/CLAUDE.md --jq '.content' | base64 -d
-
-# DEV_WORKFLOW.md
 gh api repos/TaoFuku-Roblox/.github/contents/DEV_WORKFLOW.md --jq '.content' | base64 -d
-
-# ROBLOX_CODING_STANDARDS.md
 gh api repos/TaoFuku-Roblox/.github/contents/ROBLOX_CODING_STANDARDS.md --jq '.content' | base64 -d
-
-# ROBLOX_TECHNICAL_PATTERNS.md
 gh api repos/TaoFuku-Roblox/.github/contents/ROBLOX_TECHNICAL_PATTERNS.md --jq '.content' | base64 -d
+```
 
-# ROBLOX_API_REFERENCE.md
+```bash
+# オンデマンド（ビジュアル・エフェクト作業時のみ）
 gh api repos/TaoFuku-Roblox/.github/contents/ROBLOX_API_REFERENCE.md --jq '.content' | base64 -d
 ```
 
